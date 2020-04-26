@@ -3,3 +3,14 @@
 [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/ks6088ts/rest-go/cmd/rest-go)
 
 # rest-go
+
+```bash
+# build cli
+make build
+
+# run database server
+docker-compose up -d mysql
+
+# run REST server
+./outputs/rest-go server
+```

@@ -54,6 +54,10 @@ test: ## test go modules
 .PHONY: ci
 ci: fmt vet lint build test ## run ci
 
+.PHONY: clean
+clean: ## clean outputs
+	rm -rf $(OUTPUT_DIR)
+
 # ---
 # cobra
 # ---

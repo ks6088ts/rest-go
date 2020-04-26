@@ -22,6 +22,7 @@ func NewRouter(port int) *Router {
 
 	return &Router{
 		router: r,
+		port:   port,
 	}
 }
 
