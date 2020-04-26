@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
+	// mysql driver
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 

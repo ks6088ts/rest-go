@@ -25,12 +25,10 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"github.com/ks6088ts/rest-go/pkg/repository"
+	"github.com/ks6088ts/rest-go/pkg/router"
 	"github.com/spf13/cobra"
 )
 
@@ -38,20 +36,6 @@ type serverOptions struct {
 	port    int
 	dbms    string
 	connect string
-}
-
-func setupRouter() *gin.Engine {
-	// Disable Console Color
-	// gin.DisableConsoleColor()
-	r := gin.Default()
-	r.Use(cors.Default())
-
-	// Ping test: curl localhost:8080/ping
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	return r
 }
 
 func newServerOptions() *serverOptions {
@@ -65,8 +49,8 @@ func newCmdServer() *cobra.Command {
 		Short: "run REST server",
 		Long:  `run REST server`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("port =", o.port)
-			r := setupRouter()
+
+			// Setup connection
 			session, err := repository.NewSession(o.dbms, o.connect)
 			if err != nil {
 				fmt.Println(err)
@@ -75,8 +59,9 @@ func newCmdServer() *cobra.Command {
 			defer session.Close()
 			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)
 
-			// Listen and Server in 0.0.0.0:port
-			r.Run(fmt.Sprintf(":%d", o.port))
+			// Setup router
+			r := router.NewRouter(o.port)
+			r.Run()
 		},
 	}
 
