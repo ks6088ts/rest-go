@@ -19,8 +19,8 @@ func NewSession(dbms, connect string) (*Session, error) {
 }
 
 // Close session
-func (s *Session) Close() {
-	s.db.Close()
+func (s *Session) Close() error {
+	return s.db.Close()
 }
 
 // Session is a type definition for session

@@ -56,7 +56,12 @@ func newCmdServer() *cobra.Command {
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			defer session.Close()
+			defer func() {
+				if err := session.Close(); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+			}()
 			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)
 
 			// Setup router
