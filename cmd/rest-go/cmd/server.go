@@ -26,14 +26,18 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/ks6088ts/rest-go/pkg/repository"
 	"github.com/spf13/cobra"
 )
 
 type serverOptions struct {
-	port int
+	port    int
+	dbms    string
+	connect string
 }
 
 func setupRouter() *gin.Engine {
@@ -63,6 +67,13 @@ func newCmdServer() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("port =", o.port)
 			r := setupRouter()
+			session, err := repository.NewSession(o.dbms, o.connect)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			defer session.Close()
+			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)
 
 			// Listen and Server in 0.0.0.0:port
 			r.Run(fmt.Sprintf(":%d", o.port))
@@ -70,6 +81,8 @@ func newCmdServer() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.port, "port", "p", 8080, "type port")
+	cmd.PersistentFlags().StringVarP(&o.dbms, "dbms", "d", "mysql", "type dbms")
+	cmd.PersistentFlags().StringVarP(&o.connect, "connect", "c", "root:password@tcp(localhost:3306)/db?parseTime=true", "type connect")
 
 	return cmd
 }
