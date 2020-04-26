@@ -13,3 +13,16 @@ services:
     # docker-compose run --rm cli sh
     command: >
       ./cli --help
+  mysql:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    container_name: mysql
+    env_file:
+      - ./docker/mysql/env
+    restart: always
+    ports: 
+      - "3306:3306" # for debug
+    volumes:
+      - ./volumes/mysql/logs:/var/log/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
