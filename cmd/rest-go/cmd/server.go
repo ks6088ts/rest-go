@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ks6088ts/rest-go/pkg/e"
 	"github.com/ks6088ts/rest-go/pkg/repository"
 	"github.com/ks6088ts/rest-go/pkg/router"
 	"github.com/spf13/cobra"
@@ -54,12 +55,14 @@ func newCmdServer() *cobra.Command {
 			session, err := repository.NewSession(o.dbms, o.connect)
 			if err != nil {
 				fmt.Println(err)
-				os.Exit(1)
+				e.PrintError(e.ErrorDatabaseConnection)
+				os.Exit(e.ErrorDatabaseConnection)
 			}
 			defer func() {
 				if err := session.Close(); err != nil {
 					fmt.Println(err)
-					os.Exit(1)
+					e.PrintError(e.ErrorDatabaseConnection)
+					os.Exit(e.ErrorDatabaseConnection)
 				}
 			}()
 			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)

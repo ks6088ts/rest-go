@@ -25,10 +25,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
 
+	"github.com/ks6088ts/rest-go/pkg/e"
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -54,7 +55,8 @@ to quickly create a Cobra application.`,
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		e.PrintError(e.ErrorDatabaseConnection)
+		os.Exit(e.Error)
 	}
 }
 
@@ -82,7 +84,8 @@ func initConfig() {
 		home, err := homedir.Dir()
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
+			e.PrintError(e.ErrorFindHomeDirectory)
+			os.Exit(e.ErrorFindHomeDirectory)
 		}
 
 		// Search config in home directory with name ".rest-go" (without extension).
