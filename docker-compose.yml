@@ -1,0 +1,15 @@
+version: '3'
+services:
+  cli:
+    build:
+      context: .
+      dockerfile: ./docker/cli/Dockerfile
+    container_name: cli
+    env_file:
+      - ./docker/cli/env
+    restart: always
+    volumes:
+      - ./outputs:/outputs
+    # docker-compose run --rm cli sh
+    command: >
+      ./cli --help
