@@ -32,13 +32,13 @@ import (
 	"github.com/ks6088ts/rest-go/pkg/repository"
 	"github.com/ks6088ts/rest-go/pkg/router"
 	"github.com/ks6088ts/rest-go/pkg/service"
+	"github.com/ks6088ts/rest-go/pkg/setting"
 	"github.com/spf13/cobra"
 )
 
 type serverOptions struct {
-	port    int
-	dbms    string
-	connect string
+	port     int
+	database string
 }
 
 func newServerOptions() *serverOptions {
@@ -58,8 +58,17 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 		`,
 		Run: func(cmd *cobra.Command, args []string) {
 
+			// Setup setting
+			dbsettings, err := setting.NewDatabase(o.database)
+			if err != nil {
+				fmt.Println(err)
+				e.PrintError(e.ErrorLoadSettings)
+				os.Exit(e.ErrorLoadSettings)
+			}
+			fmt.Printf("[Setting loaded] file: %s, dbms: %s, connect: %s\n", o.database, dbsettings.DbmsString(), dbsettings.ConnectString())
+
 			// Setup repository
-			session, err := repository.NewSession(o.dbms, o.connect)
+			session, err := repository.NewSession(dbsettings.DbmsString(), dbsettings.ConnectString())
 			if err != nil {
 				fmt.Println(err)
 				e.PrintError(e.ErrorDatabaseConnection)
@@ -72,7 +81,7 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 					os.Exit(e.ErrorDatabaseConnection)
 				}
 			}()
-			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)
+			fmt.Println("[Database connected]")
 
 			// Setup service
 			service, err := service.NewService(session)
@@ -103,8 +112,7 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.port, "port", "p", 8080, "type port")
-	cmd.PersistentFlags().StringVarP(&o.dbms, "dbms", "d", "mysql", "type dbms")
-	cmd.PersistentFlags().StringVarP(&o.connect, "connect", "c", "root:password@tcp(localhost:3306)/db?parseTime=true", "type connect")
+	cmd.PersistentFlags().StringVarP(&o.database, "database", "d", "settings.sample.yml", "type settings file path")
 
 	return cmd
 }

@@ -9,6 +9,7 @@ var msgFlags = map[int]string{
 	ErrorCreateService:      "failed to create a service",
 	ErrorCreateController:   "failed to create a controller",
 	ErrorCreateRouter:       "failed to create a router",
+	ErrorLoadSettings:       "failed to load settings",
 }
 
 func getMsg(code int) string {

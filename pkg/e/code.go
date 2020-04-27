@@ -20,4 +20,7 @@ const (
 
 	// ErrorCreateRouter ...
 	ErrorCreateRouter = 40001
+
+	// ErrorLoadSettings ...
+	ErrorLoadSettings = 50001
 )
