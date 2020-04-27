@@ -28,7 +28,7 @@ func (s *Service) CreateProduct(c *gin.Context) (*entity.Product, error) {
 		return nil, err
 	}
 
-	if err := s.session.Db.Create(&p).Error; err != nil {
+	if err := s.session.CreateProduct(&p); err != nil {
 		return nil, err
 	}
 
@@ -37,14 +37,15 @@ func (s *Service) CreateProduct(c *gin.Context) (*entity.Product, error) {
 
 // GetProduct ...
 func (s *Service) GetProduct(id string) (*entity.Product, error) {
-	var p entity.Product
-	if err := s.session.Db.Where("id = ?", id).First(&p).Error; err != nil {
+	p, err := s.session.GetProduct(id)
+	if err != nil {
 		return nil, err
 	}
-	return &p, nil
+
+	return p, nil
 }
 
 // MigrateProduct ...
 func (s *Service) MigrateProduct() {
-	s.session.Db.AutoMigrate(&entity.Product{})
+	s.session.MigrateProduct()
 }
