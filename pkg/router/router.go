@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/ks6088ts/rest-go/pkg/controller"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 // NewRouter returns a router
-func NewRouter(port int) *Router {
+func NewRouter(port int, c *controller.Controller) (*Router, error) {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	r := gin.Default()
@@ -20,10 +22,16 @@ func NewRouter(port int) *Router {
 		c.String(http.StatusOK, "pong")
 	})
 
+	p := r.Group("/products")
+	{
+		p.GET("/:id", c.GetProduct)
+		p.POST("", c.CreateProduct)
+	}
+
 	return &Router{
 		router: r,
 		port:   port,
-	}
+	}, nil
 }
 
 // Run attaches a router to http server

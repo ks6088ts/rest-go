@@ -14,16 +14,17 @@ func NewSession(dbms, connect string) (*Session, error) {
 	}
 
 	return &Session{
-		db: gormDB,
+		Db: gormDB,
 	}, nil
 }
 
 // Close session
 func (s *Session) Close() error {
-	return s.db.Close()
+	return s.Db.Close()
 }
 
 // Session is a type definition for session
 type Session struct {
-	db *gorm.DB
+	// TODO: 非公開化
+	Db *gorm.DB
 }

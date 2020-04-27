@@ -27,9 +27,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ks6088ts/rest-go/pkg/controller"
 	"github.com/ks6088ts/rest-go/pkg/e"
 	"github.com/ks6088ts/rest-go/pkg/repository"
 	"github.com/ks6088ts/rest-go/pkg/router"
+	"github.com/ks6088ts/rest-go/pkg/service"
 	"github.com/spf13/cobra"
 )
 
@@ -48,10 +50,15 @@ func newCmdServer() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "server",
 		Short: "run REST server",
-		Long:  `run REST server`,
+		Long: `run REST server:
+To run mysql server locally:
+  $ docker-compose up -d mysql
+To post a data to a server:
+$ curl http://localhost:8080/products -X POST -H "Content-Type: application/json" -d  '{"Name": "sample", "Description": "this is it"}'
+		`,
 		Run: func(cmd *cobra.Command, args []string) {
 
-			// Setup connection
+			// Setup repository
 			session, err := repository.NewSession(o.dbms, o.connect)
 			if err != nil {
 				fmt.Println(err)
@@ -67,8 +74,30 @@ func newCmdServer() *cobra.Command {
 			}()
 			fmt.Printf("[Database connected] dbms: %s, connect: %s\n", o.dbms, o.connect)
 
+			// Setup service
+			service, err := service.NewService(session)
+			if err != nil {
+				fmt.Println(err)
+				e.PrintError(e.ErrorCreateService)
+				os.Exit(e.ErrorCreateService)
+			}
+
+			// Setup controller
+			controller, err := controller.NewController(service)
+			if err != nil {
+				fmt.Println(err)
+				e.PrintError(e.ErrorCreateController)
+				os.Exit(e.ErrorCreateController)
+			}
+
 			// Setup router
-			r := router.NewRouter(o.port)
+			r, err := router.NewRouter(o.port, controller)
+			if err != nil {
+				fmt.Println(err)
+				e.PrintError(e.ErrorCreateController)
+				os.Exit(e.ErrorCreateController)
+			}
+
 			r.Run()
 		},
 	}

@@ -9,7 +9,10 @@ import (
 )
 
 func TestPingRoute(t *testing.T) {
-	r := NewRouter(8080)
+	r, err := NewRouter(8080, nil)
+	if err != nil {
+		t.Error(err)
+	}
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/ping", nil)

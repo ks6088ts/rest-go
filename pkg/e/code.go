@@ -11,4 +11,13 @@ const (
 
 	// ErrorDatabaseConnection ...
 	ErrorDatabaseConnection = 10001
+
+	// ErrorCreateService ...
+	ErrorCreateService = 20001
+
+	// ErrorCreateController ...
+	ErrorCreateController = 30001
+
+	// ErrorCreateRouter ...
+	ErrorCreateRouter = 40001
 )
