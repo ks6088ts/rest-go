@@ -12,8 +12,8 @@ func (s *Session) CreateProduct(p *entity.Product) error {
 	return nil
 }
 
-// GetProduct ...
-func (s *Session) GetProduct(id string) (*entity.Product, error) {
+// ReadProduct ...
+func (s *Session) ReadProduct(id string) (*entity.Product, error) {
 	var p entity.Product
 	if err := s.db.Where("id = ?", id).First(&p).Error; err != nil {
 		return nil, err

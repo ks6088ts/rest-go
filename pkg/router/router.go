@@ -24,7 +24,7 @@ func NewRouter(port int, c *controller.Controller) (*Router, error) {
 
 	p := r.Group("/products")
 	{
-		p.GET("/:id", c.GetProduct)
+		p.GET("/:id", c.ReadProduct)
 		p.GET("", c.ReadProducts)
 		p.POST("", c.CreateProduct)
 	}

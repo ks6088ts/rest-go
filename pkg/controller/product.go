@@ -21,15 +21,15 @@ func NewController(service *service.Service) (*Controller, error) {
 	}, nil
 }
 
-// GetProduct ...
-func (c *Controller) GetProduct(ctx *gin.Context) {
+// ReadProduct ...
+func (c *Controller) ReadProduct(ctx *gin.Context) {
 	id := ctx.Params.ByName("id")
-	p, err := c.Service.GetProduct(id)
+	p, err := c.Service.ReadProduct(id)
 	if err != nil {
-		ctx.AbortWithStatus(404)
+		ctx.AbortWithStatus(http.StatusNotFound)
 		fmt.Println(err)
 	}
-	ctx.JSON(200, p)
+	ctx.JSON(http.StatusOK, p)
 }
 
 // ReadProducts ...
@@ -46,8 +46,8 @@ func (c *Controller) ReadProducts(ctx *gin.Context) {
 func (c *Controller) CreateProduct(ctx *gin.Context) {
 	p, err := c.Service.CreateProduct(ctx)
 	if err != nil {
-		ctx.AbortWithStatus(404)
+		ctx.AbortWithStatus(http.StatusNotFound)
 		fmt.Println(err)
 	}
-	ctx.JSON(201, p)
+	ctx.JSON(http.StatusCreated, p)
 }

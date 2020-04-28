@@ -35,9 +35,9 @@ func (s *Service) CreateProduct(c *gin.Context) (*entity.Product, error) {
 	return &p, nil
 }
 
-// GetProduct ...
-func (s *Service) GetProduct(id string) (*entity.Product, error) {
-	p, err := s.session.GetProduct(id)
+// ReadProduct ...
+func (s *Service) ReadProduct(id string) (*entity.Product, error) {
+	p, err := s.session.ReadProduct(id)
 	if err != nil {
 		return nil, err
 	}
