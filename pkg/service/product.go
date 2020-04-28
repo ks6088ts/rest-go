@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/ks6088ts/rest-go/pkg/entity"
 	"github.com/ks6088ts/rest-go/pkg/repository"
 )
@@ -21,18 +20,12 @@ func NewService(session *repository.Session) (*Service, error) {
 }
 
 // CreateProduct ...
-func (s *Service) CreateProduct(c *gin.Context) (*entity.Product, error) {
-	var p entity.Product
-
-	if err := c.BindJSON(&p); err != nil {
+func (s *Service) CreateProduct(p *entity.Product) (*entity.Product, error) {
+	if err := s.session.CreateProduct(p); err != nil {
 		return nil, err
 	}
 
-	if err := s.session.CreateProduct(&p); err != nil {
-		return nil, err
-	}
-
-	return &p, nil
+	return p, nil
 }
 
 // ReadProduct ...

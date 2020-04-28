@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/ks6088ts/rest-go/pkg/entity"
 	"github.com/ks6088ts/rest-go/pkg/service"
 )
 
@@ -44,10 +45,16 @@ func (c *Controller) ReadProducts(ctx *gin.Context) {
 
 // CreateProduct ...
 func (c *Controller) CreateProduct(ctx *gin.Context) {
-	p, err := c.Service.CreateProduct(ctx)
+	var p entity.Product
+	if err := ctx.BindJSON(&p); err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		fmt.Println(err)
+	}
+
+	created, err := c.Service.CreateProduct(&p)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		fmt.Println(err)
 	}
-	ctx.JSON(http.StatusCreated, p)
+	ctx.JSON(http.StatusCreated, created)
 }
