@@ -45,6 +45,16 @@ func (s *Service) GetProduct(id string) (*entity.Product, error) {
 	return p, nil
 }
 
+// ReadProducts ...
+func (s *Service) ReadProducts() ([]entity.Product, error) {
+	p, err := s.session.ReadProducts()
+	if err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
+
 // MigrateProduct ...
 func (s *Service) MigrateProduct() {
 	s.session.MigrateProduct()

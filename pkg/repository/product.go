@@ -21,6 +21,15 @@ func (s *Session) GetProduct(id string) (*entity.Product, error) {
 	return &p, nil
 }
 
+// ReadProducts ...
+func (s *Session) ReadProducts() ([]entity.Product, error) {
+	products := []entity.Product{}
+	if err := s.db.Find(&products).Error; err != nil {
+		return nil, err
+	}
+	return products, nil
+}
+
 // MigrateProduct ...
 func (s *Session) MigrateProduct() {
 	s.db.AutoMigrate(&entity.Product{})

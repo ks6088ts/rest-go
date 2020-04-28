@@ -3,6 +3,8 @@ package controller
 import (
 	"fmt"
 
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ks6088ts/rest-go/pkg/service"
 )
@@ -28,6 +30,16 @@ func (c *Controller) GetProduct(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 	ctx.JSON(200, p)
+}
+
+// ReadProducts ...
+func (c *Controller) ReadProducts(ctx *gin.Context) {
+	p, err := c.Service.ReadProducts()
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		fmt.Println(err)
+	}
+	ctx.JSON(http.StatusOK, p)
 }
 
 // CreateProduct ...
