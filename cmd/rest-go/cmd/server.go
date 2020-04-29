@@ -112,7 +112,7 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.port, "port", "p", 8080, "type port")
-	cmd.PersistentFlags().StringVarP(&o.database, "database", "d", "settings.sample.yml", "type settings file path")
+	cmd.PersistentFlags().StringVarP(&o.database, "database", "d", "./settings.sample.yml", "type settings file path")
 
 	return cmd
 }

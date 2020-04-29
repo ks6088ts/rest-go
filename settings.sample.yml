@@ -6,5 +6,5 @@ database:
         protocol: tcp
         host: localhost
         port: 3306
-        db_name: db
-        db_args: parseTime=true
+        dbname: db
+        dbargs: parseTime=true

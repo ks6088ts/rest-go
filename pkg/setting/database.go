@@ -2,9 +2,8 @@ package setting
 
 import (
 	"fmt"
-	"io/ioutil"
 
-	yaml "gopkg.in/yaml.v2"
+	"github.com/spf13/viper"
 )
 
 // DatabaseSettings ...
@@ -25,30 +24,27 @@ type Connect struct {
 	Protocol string `yaml:"protocol"`
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
-	DbName   string `yaml:"db_name"`
-	DbArgs   string `yaml:"db_args"`
+	Dbname   string `yaml:"dbname"`
+	Dbargs   string `yaml:"dbargs"`
 }
 
 // NewDatabase ...
 func NewDatabase(file string) (*DatabaseSettings, error) {
-	buf, err := ioutil.ReadFile(file)
-	if err != nil {
+	viper.SetConfigFile(file)
+	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
 	}
-
-	var d DatabaseSettings
-	err = yaml.Unmarshal(buf, &d)
-	if err != nil {
+	var settings DatabaseSettings
+	if err := viper.Unmarshal(&settings); err != nil {
 		return nil, err
 	}
-
-	return &d, nil
+	return &settings, nil
 }
 
 // ConnectString ...
 func (d *DatabaseSettings) ConnectString() string {
 	c := &d.Database.Connect
-	return fmt.Sprintf("%s:%s@%s(%s:%s)/%s?%s", c.User, c.Password, c.Protocol, c.Host, c.Port, c.DbName, c.DbArgs)
+	return fmt.Sprintf("%s:%s@%s(%s:%s)/%s?%s", c.User, c.Password, c.Protocol, c.Host, c.Port, c.Dbname, c.Dbargs)
 }
 
 // DbmsString ...
