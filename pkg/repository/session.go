@@ -1,29 +1,17 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
+
 	// mysql driver
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/ks6088ts/rest-go/pkg/entity"
 )
 
-// NewSession creates a session
-func NewSession(dbms, connect string) (*Session, error) {
-	gormDB, err := gorm.Open(dbms, connect)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Session{
-		db: gormDB,
-	}, nil
-}
-
-// Close session
-func (s *Session) Close() error {
-	return s.db.Close()
-}
-
-// Session is a type definition for session
-type Session struct {
-	db *gorm.DB
+// Session ...
+type Session interface {
+	Close() error
+	CreateProduct(p *entity.Product) error
+	ReadProduct(id string) (*entity.Product, error)
+	ReadProducts() ([]entity.Product, error)
+	MigrateProduct()
 }

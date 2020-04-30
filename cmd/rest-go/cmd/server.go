@@ -68,7 +68,7 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 			fmt.Printf("[Setting loaded] file: %s, dbms: %s, connect: %s\n", o.database, dbsettings.DbmsString(), dbsettings.ConnectString())
 
 			// Setup repository
-			session, err := repository.NewSession(dbsettings.DbmsString(), dbsettings.ConnectString())
+			session, err := repository.NewGormSession(dbsettings.DbmsString(), dbsettings.ConnectString())
 			if err != nil {
 				fmt.Println(err)
 				e.PrintError(e.ErrorDatabaseConnection)

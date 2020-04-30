@@ -7,11 +7,11 @@ import (
 
 // Service ...
 type Service struct {
-	session *repository.Session
+	session repository.Session
 }
 
 // NewService creates a service
-func NewService(session *repository.Session) (*Service, error) {
+func NewService(session repository.Session) (*Service, error) {
 	service := &Service{
 		session: session,
 	}
