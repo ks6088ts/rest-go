@@ -39,6 +39,7 @@ import (
 type serverOptions struct {
 	port     int
 	database string
+	mock     bool
 }
 
 func newServerOptions() *serverOptions {
@@ -68,7 +69,13 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 			fmt.Printf("[Setting loaded] file: %s, dbms: %s, connect: %s\n", o.database, dbsettings.DbmsString(), dbsettings.ConnectString())
 
 			// Setup repository
-			session, err := repository.NewGormSession(dbsettings.DbmsString(), dbsettings.ConnectString())
+			var session repository.Session
+			if o.mock {
+				session, err = repository.NewMockSession()
+			} else {
+				session, err = repository.NewGormSession(dbsettings.DbmsString(), dbsettings.ConnectString())
+			}
+
 			if err != nil {
 				fmt.Println(err)
 				e.PrintError(e.ErrorDatabaseConnection)
@@ -113,6 +120,7 @@ $ curl http://localhost:8080/products -X POST -H "Content-Type: application/json
 
 	cmd.PersistentFlags().IntVarP(&o.port, "port", "p", 8080, "type port")
 	cmd.PersistentFlags().StringVarP(&o.database, "database", "d", "./settings.sample.yml", "type settings file path")
+	cmd.PersistentFlags().BoolVarP(&o.mock, "mock", "m", false, "use mock database")
 
 	return cmd
 }
