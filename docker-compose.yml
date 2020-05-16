@@ -25,4 +25,11 @@ services:
       - "3306:3306" # for debug
     volumes:
       - ./volumes/mysql/logs:/var/log/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    networks:
+      - default
+      - shared-network
+
+networks:
+  shared-network:
+    external: true
