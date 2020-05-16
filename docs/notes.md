@@ -10,3 +10,18 @@
 * [【go】golangでyamlを読み込んでstructに入れるメモ - gopkg.in/yaml.v2](https://www.tweeeety.blog/entry/2017/06/04/231043)
 * [【はじめてのGO】gin + gormでシンプルなCRUDなREST APIを作成する](https://qiita.com/daitasu/items/9428220810816972b5d5#read)
 * [TeamSQL もいいけど、 DBeaver もいいぞ](https://qiita.com/nanasess/items/609c7cda4adee344221c)
+
+# MySQL
+
+```bash
+docker-compose exec mysql mysql -u root -p
+
+# mysql> ---
+show databases;
+use db;
+show tables;
+desc products;
+insert into products (id, name, description) values \
+(1, "yamada", "I am yamada"), \
+(2, "okada", "I am okada");
+```
