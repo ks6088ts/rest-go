@@ -4,7 +4,7 @@ database:
         user: root
         password: password
         protocol: tcp
-        host: localhost
+        host: mysql # for docker(specify `localhost` for local)
         port: 3306
         dbname: db
         dbargs: parseTime=true

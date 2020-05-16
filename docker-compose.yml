@@ -8,11 +8,16 @@ services:
     env_file:
       - ./docker/cli/env
     restart: always
+    # ports:
+    #   - 8081:8081 # for debug
     volumes:
       - ./outputs:/outputs
-    # docker-compose run --rm cli sh
+      - ./settings.sample.yml:/app/settings.sample.yml
+    networks:
+      - default
+      - shared-network
     command: >
-      ./cli --help
+      ./cli server -p 8081
   mysql:
     build:
       context: .
@@ -21,8 +26,8 @@ services:
     env_file:
       - ./docker/mysql/env
     restart: always
-    ports: 
-      - "3306:3306" # for debug
+    # ports: 
+    #   - "3306:3306" # for debug
     volumes:
       - ./volumes/mysql/logs:/var/log/mysql
       - ./docker/mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
